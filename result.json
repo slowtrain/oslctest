@@ -1,0 +1,8 @@
+{
+	"rdf:type":[{"rdf:resource":"http:\/\/www.w3.org\/2000\/01\/rdf-schema#Container"}]
+}
+,"rdfs:member":[
+                {"spi:assetnum":"1004","spi:description":"updateAssetTest","rdf:about":"http:\/\/localhost:7001\/maximo\/oslc\/os\/oslcasset\/_MTAwNC9CRURGT1JE"}
+                ,{"spi:assetnum":"1005","spi:description":"Fire Extinguisher","rdf:about":"http:\/\/localhost:7001\/maximo\/oslc\/os\/oslcasset\/_MTAwNS9CRURGT1JE"}],"rdf:about":"http:\/\/localhost:7001\/maximo\/oslc\/os\/oslcasset","prefixes":{"rdfs":"http:\/\/www.w3.org\/2000\/01\/rdf-schema#","spi":"http:\/\/jazz.net\/ns\/ism\/asset\/smarter_physical_infrastructure#","oslc":"http:\/\/open-services.net\/ns\/core#","rdf":"http:\/\/www.w3.org\/1999\/02\/22-rdf-syntax-ns#"}}
+}
+
