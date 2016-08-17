@@ -2,6 +2,8 @@ package com.cafelivro.oslc;
 
 import java.util.Iterator;
 
+import javax.json.JsonObject;
+
 import com.ibm.json.java.JSONArray;
 import com.ibm.json.java.JSONObject;
 
@@ -100,14 +102,16 @@ public class HTTPCallTest {
 	
 	public static void attachementTest(HTTPToMaximo toMaximo){
 		String oslcWhere   = "oslc.where=spi:personid=\"TEST002\"";
-		String oslcSelect  = "oslc.select=spi:personid,spi:displayname,spi:status";
+		String oslcSelect  = "oslc.select=spi:doclinks";
 
 	    JSONObject result=toMaximo.query("oslcperson",oslcWhere,oslcSelect);
 	    JSONArray assetSet =(JSONArray)result.get("rdfs:member");
 		System.out.println("count : "+assetSet.size());
 		JSONObject asset=(JSONObject)assetSet.get(0);
 
-	    String resourceIdentifier=(String)asset.get("rdf:about");
+		JSONObject doclinks=(JSONObject)asset.get("spi:doclinks");
+		String resourceIdentifier =(String)doclinks.get("rdf:resource");
+		System.out.println("identifier : "+resourceIdentifier);
 	    toMaximo.addAttachment(resourceIdentifier);
 	}
 	

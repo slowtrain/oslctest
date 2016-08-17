@@ -1,6 +1,8 @@
 package com.cafelivro.oslc;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -12,9 +14,13 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Base64;
 import java.util.Iterator;
 
+import javax.json.Json;
 import javax.json.JsonObject;
 import javax.net.ssl.HttpsURLConnection;
 import javax.security.auth.callback.TextOutputCallback;
@@ -285,7 +291,8 @@ public class HTTPToMaximo {
 	/**
 	 * @param objectStructure
 	 * @param json
-	 * @return Integer 201 OK
+	 * @return Integer 201 OK Created , 400 Bad Request 
+	 *  
 	 */
 	public Integer addAttachment(String resourceIdentifier) {
 		int responseCode =-1;
@@ -294,49 +301,38 @@ public class HTTPToMaximo {
 		    URL httpUrl = new URL(requestUri);  
 		    HttpURLConnection urlConnection = (HttpURLConnection) httpUrl.openConnection();
 		    
+		    String path="C:\\Temp\\";
 		    String slug="test.txt";
-		    String desc="테스트 파일";
+		    String desc="send file test";
 		    String encslug=Base64.getUrlEncoder().encodeToString(slug.getBytes());
 		    String encdesc=Base64.getUrlEncoder().encodeToString(desc.getBytes());
+		    
 		    urlConnection.setRequestMethod("POST");
 		    urlConnection.setRequestProperty("MAXAUTH", maxauth);
 		    urlConnection.setRequestProperty("x-public-uri", basicUri);
 		    urlConnection.setRequestProperty("slug", slug);
 		    urlConnection.setRequestProperty("encslug", encslug);
 		    urlConnection.setRequestProperty("Content-Type", "text/plain");
-		    urlConnection.setRequestProperty("x-document-meta", "text");
+		    urlConnection.setRequestProperty("x-document-meta", "Attachments");
 		    urlConnection.setRequestProperty("x-document-description", desc);
 		    urlConnection.setRequestProperty("x-document-encdescription", encdesc);
 		    urlConnection.setRequestProperty("custom-encoding", "base64");
-
 		    urlConnection.setDoOutput(true);
-
-		    
+	   
 		    urlConnection.connect();  
-		    
-		    JSONObject doclink=new JSONObject();
-		    JSONObject href=new JSONObject();
-		    href.put("href", "requestUri/doclinks");
-		    doclink.put("doclinks",href);
-		    
-		    
-		    InputStream is=new FileInputStream(new File("C:\\Temp\\test.txt"));
-		    OutputStream os =urlConnection.getOutputStream();
 
-		    OutputStreamWriter osw = new OutputStreamWriter(os);
-		    osw.write(doclink.toString());
-//		    byte[] buffer = new byte[1024]; // Adjust if you want
-//		    int bytesRead;
-//		    while ((bytesRead = is.read(buffer)) != -1){
-//		    	os.write(buffer, 0, bytesRead);
-//		    }
-		    
-		    os.flush();
-		    os.close();
-		    is.close();
+//		    File file = new File(path+slug);
+//	        byte[] bFile = new byte[(int) file.length()];
+	        
+	        byte[] bFile=Files.readAllBytes(Paths.get(path+slug));
 
-		   			
+	        OutputStream os =urlConnection.getOutputStream();
+			os.write(bFile);
+			os.flush();
+			os.close();
+
 			responseCode = urlConnection.getResponseCode();
+			
 			System.out.println("Add request to URL : " + requestUri);
 			System.out.println("Response Code  : " + responseCode);
 			System.out.println("Response Message : "+urlConnection.getResponseMessage());
@@ -346,8 +342,7 @@ public class HTTPToMaximo {
 		}
 		return responseCode;
 	}
-	
-	
+
 	
 	/**
 	 * @param resourceIdentifier
