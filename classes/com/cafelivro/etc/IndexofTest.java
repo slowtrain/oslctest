@@ -1,3 +1,5 @@
+package com.cafelivro.etc;
+
 
 
 public class IndexofTest {

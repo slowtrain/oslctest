@@ -1,3 +1,5 @@
+package com.cafelivro.etc;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
